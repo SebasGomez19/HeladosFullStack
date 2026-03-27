@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Helados</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+
+<nav class="navbar navbar-dark px-4" style="background:#1a3a2a;">
+    <span class="navbar-brand fw-semibold">Helados Fulsta</span>
+    <div class="d-flex gap-3">
+        <a class="nav-link text-white-50" th:href="@{/clientes/listar}">Clientes</a>
+        <a class="nav-link text-white active" th:href="@{/helados/listar}">Helados</a>
+        <a class="nav-link text-white-50" th:href="@{/ventas/listar}">Ventas</a>
+    </div>
+</nav>
+
+<div class="container-fluid px-4 py-3">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Helados</h5>
+        <a th:href="@{/helados/crear}" class="btn btn-sm text-white" style="background:#1a3a2a;">
+            + Nuevo helado
+        </a>
+    </div>
+
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+        <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="helado : ${helados}">
+            <td th:text="${helado.codHelado}"></td>
+            <td th:text="${helado.nombre}"></td>
+            <td th:text="${helado.descripcion}"></td>
+            <td>
+                <span th:if="${helado.estado == 1}" class="badge bg-success">Activo</span>
+                <span th:unless="${helado.estado == 1}" class="badge bg-danger">Inactivo</span>
+            </td>
+            <td>
+                <a th:href="@{/helados/actualizar/{id}(id=${helado.codHelado})}"
+                   class="btn btn-warning btn-sm">Editar</a>
+                <a th:href="@{/helados/eliminar/{id}(id=${helado.codHelado})}"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('¿Eliminar este helado?')">Eliminar</a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(helados)}">
+            <td colspan="5" class="text-center text-muted">No hay helados registrados.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav th:if="${totalPages > 1}">
+        <ul class="pagination pagination-sm">
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link" th:href="@{/helados/listar(page=${currentPage - 1}, criterio=${criterio})}">‹</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link" th:href="@{/helados/listar(page=${i}, criterio=${criterio})}"
+                   th:text="${i + 1}"></a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link" th:href="@{/helados/listar(page=${currentPage + 1}, criterio=${criterio})}">›</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>
