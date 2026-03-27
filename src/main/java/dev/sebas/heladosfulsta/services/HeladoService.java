@@ -41,4 +41,15 @@ public class HeladoService implements iHeladoService {
         return heladoRepository.findAll(pageable);
     }
 
+    public void eliminarHelado(Integer id) {
+        try {
+            heladoRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("No se puede eliminar el Helado debido a que esta asociado a una venta");
+        }
+    }
+
+    public List<Helado> encontrarActivos() {
+        return heladoRepository.findHeladosActivos();
+    }
 }

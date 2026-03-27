@@ -24,7 +24,11 @@ public class ClienteService implements iClienteService {
 
     @Override
     public void deleteById(Integer id) {
-        clienteRepository.deleteById(id);
+        try {
+            clienteRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("No se puede eliminar el Cliente debido a que esta asociado a una venta");
+        }
     }
 
     @Override
@@ -41,5 +45,6 @@ public class ClienteService implements iClienteService {
     public Page<Cliente> findAll(Pageable pageable) {
         return clienteRepository.findAll(pageable);
     }
+
 
 }

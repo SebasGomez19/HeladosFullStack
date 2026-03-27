@@ -34,7 +34,7 @@ public class VentaRest {
 
     private void cargarCombos(Model model) {
         List<Cliente> clientes = clienteService.findAll();
-        List<Helado> helados = heladoService.findAll();
+        List<Helado> helados = heladoService.encontrarActivos();
         model.addAttribute("arrClientes", clientes);
         model.addAttribute("arrHelados", helados);
     }

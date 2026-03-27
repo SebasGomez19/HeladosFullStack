@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/helados")
@@ -87,8 +88,13 @@ public class HeladoRest {
     }
 
     @RequestMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable @Min(1) Integer id) {
-        heladoService.deleteById(id);
+    public String eliminar(@PathVariable @Min(1) Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            heladoService.eliminarHelado(id);
+            redirectAttributes.addFlashAttribute("message", "Helado eliminado correctamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
         return "redirect:/helados/listar";
     }
 }
